@@ -1,7 +1,6 @@
 package com.example.hangout_csci_finalproject;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +15,10 @@ import io.realm.Realm;
 
 public class Home extends AppCompatActivity {
 
-    Button UserButtonHome;
-    Realm realm;
+    private Button UserButtonHome;
+    private Button detailButton;
+    private Button exploreButton;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +31,14 @@ public class Home extends AppCompatActivity {
             return insets;
         });
         init();
+        realm = Realm.getDefaultInstance();
     }
-    public void init(){
+
+    private void init() {
         UserButtonHome = findViewById(R.id.userButtonHome);
+        detailButton = findViewById(R.id.placedetailbutton);
+        exploreButton = findViewById(R.id.explorebutton);
+
         UserButtonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,17 +46,40 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        realm = Realm.getDefaultInstance();
+        detailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDetailButtonClicked(v);
+            }
+        });
+
+        exploreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onExploreButtonClicked(v);
+            }
+        });
     }
 
-    public void gotoUserPage(){
+    private void gotoUserPage() {
         Intent intent = new Intent(this, UserProfilePage.class);
         startActivity(intent);
     }
 
-    public void onDestroy() {
+    private void onDetailButtonClicked(View v) {
+        Intent intent = new Intent(this, PlaceDetail.class);
+        startActivity(intent);
+    }
+
+    private void onExploreButtonClicked(View v) {
+        Intent intent = new Intent(this, ExplorePage.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
-        if (!realm.isClosed()) {
+        if (realm != null && !realm.isClosed()) {
             realm.close();
         }
     }

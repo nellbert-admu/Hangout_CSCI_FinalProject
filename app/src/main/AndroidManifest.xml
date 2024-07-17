@@ -29,6 +29,9 @@
             android:name=".ExploreResultsPage"
             android:exported="false" />
         <activity
+            android:name=".PlaceDetail"
+            android:exported="false" />
+        <activity
             android:name=".Home"
             android:exported="false" />
         <activity
