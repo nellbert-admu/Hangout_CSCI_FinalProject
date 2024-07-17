@@ -21,7 +21,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Here lies Ethan's Home :>"
+        android:text="hi maris. where to?"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,16 +31,14 @@
         app:layout_constraintVertical_bias="0.154" />
 
     <Button
-        android:id="@+id/userButtonHome"
+        android:id="@+id/explorebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User"
+        android:layout_marginBottom="32dp"
+        android:text="EXPLORE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.897"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.948" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/placedetailbutton"
@@ -48,21 +46,32 @@
         android:layout_height="wrap_content"
         android:text="DETAIL"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/userButtonHome"
-        app:layout_constraintHorizontal_bias="0.29"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.948" />
+        app:layout_constraintVertical_bias="0.816" />
 
     <Button
-        android:id="@+id/explorebutton"
+        android:id="@+id/userButtonHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="EXPLORE"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="32dp"
+        android:text="User"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/userButtonHome"
-        app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toEndOf="@+id/placedetailbutton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.948" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/explorebutton" />
+
+    <Button
+        android:id="@+id/addPlaceButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="new "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/explorebutton"
+        app:layout_constraintHorizontal_bias="0.82"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
