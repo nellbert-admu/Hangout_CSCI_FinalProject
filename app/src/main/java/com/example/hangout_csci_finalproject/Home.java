@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class Home extends AppCompatActivity {
 
@@ -19,6 +22,7 @@ public class Home extends AppCompatActivity {
     private Button detailButton;
     private Button exploreButton;
     private Realm realm;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,23 @@ public class Home extends AppCompatActivity {
         UserButtonHome = findViewById(R.id.userButtonHome);
         detailButton = findViewById(R.id.placedetailbutton);
         exploreButton = findViewById(R.id.explorebutton);
+        recyclerView = findViewById(R.id.recyclerView);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        // initialize realm
+        realm = Realm.getDefaultInstance();
+
+        // query the things to display
+        RealmResults<Place> list = realm.where(Place.class).findAll();
+
+
+        // initialize adapter
+        PlaceAdapter adapter = new PlaceAdapter(list);
+        recyclerView.setAdapter(adapter);
+
 
         UserButtonHome.setOnClickListener(new View.OnClickListener() {
             @Override
