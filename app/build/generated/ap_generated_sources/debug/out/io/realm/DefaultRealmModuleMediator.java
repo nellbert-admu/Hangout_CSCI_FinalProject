@@ -26,15 +26,17 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
     private static final Set<Class<? extends RealmModel>> MODEL_CLASSES;
     static {
-        Set<Class<? extends RealmModel>> modelClasses = new HashSet<Class<? extends RealmModel>>(1);
+        Set<Class<? extends RealmModel>> modelClasses = new HashSet<Class<? extends RealmModel>>(2);
         modelClasses.add(com.example.hangout_csci_finalproject.User.class);
+        modelClasses.add(com.example.hangout_csci_finalproject.Place.class);
         MODEL_CLASSES = Collections.unmodifiableSet(modelClasses);
     }
 
     @Override
     public Map<Class<? extends RealmModel>, OsObjectSchemaInfo> getExpectedObjectSchemaInfoMap() {
-        Map<Class<? extends RealmModel>, OsObjectSchemaInfo> infoMap = new HashMap<Class<? extends RealmModel>, OsObjectSchemaInfo>(1);
+        Map<Class<? extends RealmModel>, OsObjectSchemaInfo> infoMap = new HashMap<Class<? extends RealmModel>, OsObjectSchemaInfo>(2);
         infoMap.put(com.example.hangout_csci_finalproject.User.class, io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.getExpectedObjectSchemaInfo());
+        infoMap.put(com.example.hangout_csci_finalproject.Place.class, io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.getExpectedObjectSchemaInfo());
         return infoMap;
     }
 
@@ -44,6 +46,9 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
             return io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.createColumnInfo(schemaInfo);
+        }
+        if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            return io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.createColumnInfo(schemaInfo);
         }
         throw getMissingProxyClassException(clazz);
     }
@@ -55,6 +60,9 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
             return "User";
         }
+        if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            return "Place";
+        }
         throw getMissingProxyClassException(clazz);
     }
 
@@ -65,12 +73,16 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
         if (className.equals("User")) {
             return com.example.hangout_csci_finalproject.User.class;
         }
+        if (className.equals("Place")) {
+            return com.example.hangout_csci_finalproject.Place.class;
+        }
         throw getMissingProxyClassException(className);
     }
 
     @Override
     public boolean hasPrimaryKeyImpl(Class<? extends RealmModel> clazz) {
-        return com.example.hangout_csci_finalproject.User.class.isAssignableFrom(clazz);
+        return com.example.hangout_csci_finalproject.User.class.isAssignableFrom(clazz)
+                || com.example.hangout_csci_finalproject.Place.class.isAssignableFrom(clazz);
     }
 
     @Override
@@ -82,6 +94,9 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
             if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
                 return clazz.cast(new io.realm.com_example_hangout_csci_finalproject_UserRealmProxy());
+            }
+            if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+                return clazz.cast(new io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy());
             }
             throw getMissingProxyClassException(clazz);
         } finally {
@@ -104,6 +119,10 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
             com_example_hangout_csci_finalproject_UserRealmProxy.UserColumnInfo columnInfo = (com_example_hangout_csci_finalproject_UserRealmProxy.UserColumnInfo) realm.getSchema().getColumnInfo(com.example.hangout_csci_finalproject.User.class);
             return clazz.cast(io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.copyOrUpdate(realm, columnInfo, (com.example.hangout_csci_finalproject.User) obj, update, cache, flags));
         }
+        if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            com_example_hangout_csci_finalproject_PlaceRealmProxy.PlaceColumnInfo columnInfo = (com_example_hangout_csci_finalproject_PlaceRealmProxy.PlaceColumnInfo) realm.getSchema().getColumnInfo(com.example.hangout_csci_finalproject.Place.class);
+            return clazz.cast(io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.copyOrUpdate(realm, columnInfo, (com.example.hangout_csci_finalproject.Place) obj, update, cache, flags));
+        }
         throw getMissingProxyClassException(clazz);
     }
 
@@ -115,6 +134,8 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
             return io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.insert(realm, (com.example.hangout_csci_finalproject.User) object, cache);
+        } else if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            return io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.insert(realm, (com.example.hangout_csci_finalproject.Place) object, cache);
         } else {
             throw getMissingProxyClassException(clazz);
         }
@@ -134,12 +155,16 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
             if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
                 io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.insert(realm, (com.example.hangout_csci_finalproject.User) object, cache);
+            } else if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+                io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.insert(realm, (com.example.hangout_csci_finalproject.Place) object, cache);
             } else {
                 throw getMissingProxyClassException(clazz);
             }
             if (iterator.hasNext()) {
                 if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
                     io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.insert(realm, iterator, cache);
+                } else if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+                    io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.insert(realm, iterator, cache);
                 } else {
                     throw getMissingProxyClassException(clazz);
                 }
@@ -155,6 +180,8 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
             return io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.insertOrUpdate(realm, (com.example.hangout_csci_finalproject.User) obj, cache);
+        } else if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            return io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.insertOrUpdate(realm, (com.example.hangout_csci_finalproject.Place) obj, cache);
         } else {
             throw getMissingProxyClassException(clazz);
         }
@@ -174,12 +201,16 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
             if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
                 io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.insertOrUpdate(realm, (com.example.hangout_csci_finalproject.User) object, cache);
+            } else if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+                io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.insertOrUpdate(realm, (com.example.hangout_csci_finalproject.Place) object, cache);
             } else {
                 throw getMissingProxyClassException(clazz);
             }
             if (iterator.hasNext()) {
                 if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
                     io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.insertOrUpdate(realm, iterator, cache);
+                } else if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+                    io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.insertOrUpdate(realm, iterator, cache);
                 } else {
                     throw getMissingProxyClassException(clazz);
                 }
@@ -195,6 +226,9 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
             return clazz.cast(io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.createOrUpdateUsingJsonObject(realm, json, update));
         }
+        if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            return clazz.cast(io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.createOrUpdateUsingJsonObject(realm, json, update));
+        }
         throw getMissingProxyClassException(clazz);
     }
 
@@ -205,6 +239,9 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
             return clazz.cast(io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.createUsingJsonStream(realm, reader));
+        }
+        if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            return clazz.cast(io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.createUsingJsonStream(realm, reader));
         }
         throw getMissingProxyClassException(clazz);
     }
@@ -218,12 +255,18 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
             return clazz.cast(io.realm.com_example_hangout_csci_finalproject_UserRealmProxy.createDetachedCopy((com.example.hangout_csci_finalproject.User) realmObject, 0, maxDepth, cache));
         }
+        if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            return clazz.cast(io.realm.com_example_hangout_csci_finalproject_PlaceRealmProxy.createDetachedCopy((com.example.hangout_csci_finalproject.Place) realmObject, 0, maxDepth, cache));
+        }
         throw getMissingProxyClassException(clazz);
     }
 
     @Override
     public <E extends RealmModel> boolean isEmbedded(Class<E> clazz) {
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
+            return false;
+        }
+        if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
             return false;
         }
         throw getMissingProxyClassException(clazz);
@@ -237,6 +280,8 @@ class DefaultRealmModuleMediator extends RealmProxyMediator {
 
         if (clazz.equals(com.example.hangout_csci_finalproject.User.class)) {
             throw getNotEmbeddedClassException("com.example.hangout_csci_finalproject.User");
+        } else if (clazz.equals(com.example.hangout_csci_finalproject.Place.class)) {
+            throw getNotEmbeddedClassException("com.example.hangout_csci_finalproject.Place");
         } else {
             throw getMissingProxyClassException(clazz);
         }

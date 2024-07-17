@@ -23,6 +23,12 @@
             android:name=".RegisterPage"
             android:exported="false" />
         <activity
+            android:name=".ExplorePage"
+            android:exported="false" />
+        <activity
+            android:name=".ExploreResultsPage"
+            android:exported="false" />
+        <activity
             android:name=".Home"
             android:exported="false" />
         <activity
