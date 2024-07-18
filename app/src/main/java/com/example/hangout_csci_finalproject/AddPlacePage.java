@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.realm.Realm;
 
 public class AddPlacePage extends AppCompatActivity {
-
     private Realm realm;
     private EditText placeNameView;
     private EditText locationView;
@@ -33,10 +32,9 @@ public class AddPlacePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
-
         placeNameView = findViewById(R.id.editPlaceName);
         locationView = findViewById(R.id.editPlaceLoc);
-        descriptionView = findViewById(R.id.editTextTextMultiLine);
+        descriptionView = findViewById(R.id.editDesc);
         toggleDining = findViewById(R.id.toggleDining);
         toggleOutlets = findViewById(R.id.toggleOutlets);
         toggleAircon = findViewById(R.id.toggleAircon);
@@ -77,6 +75,8 @@ public class AddPlacePage extends AppCompatActivity {
         realm.beginTransaction();
         Place place = realm.createObject(Place.class);
         place.setName(placeName);
+        place.setLocation(location);
+        place.setDescription(descriptionView.getText().toString());
         place.setDining(toggleDining.isChecked());
         place.setOutlet(toggleOutlets.isChecked());
         place.setAircon(toggleAircon.isChecked());
