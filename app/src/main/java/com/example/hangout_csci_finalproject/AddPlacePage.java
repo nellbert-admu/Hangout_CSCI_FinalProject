@@ -6,9 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.UUID;
+
 import io.realm.Realm;
 
 public class AddPlacePage extends AppCompatActivity {
@@ -63,24 +65,26 @@ public class AddPlacePage extends AppCompatActivity {
     }
 
     private void addNewPlace() {
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Place place = realm.createObject(Place.class, UUID.randomUUID().toString());
-                place.setName(placeNameView.getText().toString());
-                place.setLocation(locationView.getText().toString());
-                place.setDescription(descriptionView.getText().toString());
-                place.setDining(toggleDining.isChecked());
-                place.setOutlet(toggleOutlets.isChecked());
-                place.setAircon(toggleAircon.isChecked());
-                place.setQuiet(toggleQuiet.isChecked());
-                place.setRestroom(toggleRestrooms.isChecked());
-                place.setWifi(toggleWifi.isChecked());
-            }
-        });
+        String placeName = placeNameView.getText().toString();
+        String location = locationView.getText().toString();
 
-        Intent intent = new Intent(this, Home.class);
-        startActivity(intent);
+        if (placeName.isEmpty() || location.isEmpty()) {
+            // Show an error message to the user
+            Toast.makeText(this, "Place name and location cannot be empty", Toast.LENGTH_SHORT).show();
+            return; // Exit the method early
+        }
+
+        realm.beginTransaction();
+        Place place = realm.createObject(Place.class);
+        place.setName(placeName);
+        place.setDining(toggleDining.isChecked());
+        place.setOutlet(toggleOutlets.isChecked());
+        place.setAircon(toggleAircon.isChecked());
+        place.setQuiet(toggleQuiet.isChecked());
+        place.setRestroom(toggleRestrooms.isChecked());
+        place.setWifi(toggleWifi.isChecked());
+        realm.commitTransaction();
+
         finish();
     }
 
