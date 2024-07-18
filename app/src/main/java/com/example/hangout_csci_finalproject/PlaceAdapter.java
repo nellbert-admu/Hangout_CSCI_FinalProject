@@ -4,8 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import io.realm.RealmResults;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
@@ -26,7 +28,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Place place = places.get(position);
         holder.nameTextView.setText(place.getName());
-
+        holder.locationTextView.setText(place.getLocation());  
     }
 
     @Override
@@ -36,9 +38,12 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
+        TextView locationTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
+            nameTextView = itemView.findViewById(R.id.place_name);
+            locationTextView = itemView.findViewById(R.id.place_loc);
         }
     }
 }

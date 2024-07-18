@@ -24,6 +24,7 @@ public class Home extends AppCompatActivity {
     private Button addPlaceButton;
     private Realm realm;
     private RecyclerView recyclerView;
+    private PlaceAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class Home extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
     }
 
+
     private void init() {
         UserButtonHome = findViewById(R.id.userButtonHome);
         detailButton = findViewById(R.id.placedetailbutton);
@@ -50,17 +52,9 @@ public class Home extends AppCompatActivity {
         mLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        // initialize realm
+        // Initialize realm
         realm = Realm.getDefaultInstance();
-
-        // query the things to display
-        RealmResults<Place> list = realm.where(Place.class).findAll();
-
-
-        // initialize adapter
-        PlaceAdapter adapter = new PlaceAdapter(list);
-        recyclerView.setAdapter(adapter);
-
+        // query ??
 
         UserButtonHome.setOnClickListener(new View.OnClickListener() {
             @Override

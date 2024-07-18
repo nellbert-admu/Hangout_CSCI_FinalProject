@@ -39,5 +39,12 @@ public class MyMigration implements RealmMigration {
                     .addField("wifi", boolean.class);
             oldVersion++;
         }
+
+        if (oldVersion == 2) {
+            schema.get("Place")
+                    .addField("location", String.class)
+                    .addField("description", String.class);
+            oldVersion++;
+        }
     }
 }

@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
+import java.util.UUID;
 import io.realm.Realm;
 
 public class AddPlacePage extends AppCompatActivity {
@@ -21,6 +23,7 @@ public class AddPlacePage extends AppCompatActivity {
     private ToggleButton toggleQuiet;
     private ToggleButton toggleRestrooms;
     private ToggleButton toggleWifi;
+    private RatingBar ratingBar;
     private Button addButton;
     private Button backButton;
 
@@ -38,6 +41,7 @@ public class AddPlacePage extends AppCompatActivity {
         toggleQuiet = findViewById(R.id.toggleQuiet);
         toggleRestrooms = findViewById(R.id.toggleRestrooms);
         toggleWifi = findViewById(R.id.togglePlaceWifi);
+        ratingBar = findViewById(R.id.ratingBar);
         addButton = findViewById(R.id.addButton);
         backButton = findViewById(R.id.back_button);
 
@@ -62,8 +66,10 @@ public class AddPlacePage extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Place place = realm.createObject(Place.class);
+                Place place = realm.createObject(Place.class, UUID.randomUUID().toString());
                 place.setName(placeNameView.getText().toString());
+                place.setLocation(locationView.getText().toString());
+                place.setDescription(descriptionView.getText().toString());
                 place.setDining(toggleDining.isChecked());
                 place.setOutlet(toggleOutlets.isChecked());
                 place.setAircon(toggleAircon.isChecked());
