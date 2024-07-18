@@ -1,6 +1,7 @@
 package com.example.hangout_csci_finalproject;
 
 import android.app.Application;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -12,8 +13,8 @@ public class MyApp extends Application {
         Realm.init(this); // for realm
 
         RealmConfiguration config = new RealmConfiguration.Builder()
-                .schemaVersion(3) // for schema changes
-                .migration(new MyMigration()) //  migration implementation
+                .schemaVersion(1) // for schema changes
+                .deleteRealmIfMigrationNeeded() //  migration implementation
                 .build();
 
         Realm.setDefaultConfiguration(config);

@@ -13,6 +13,7 @@ public class MyMigration implements RealmMigration {
         if (oldVersion == 0) {
             schema.create("Place")
                     .addField("id", String.class, FieldAttribute.PRIMARY_KEY)
+                    .addField("userUuid", String.class)
                     .addField("name", String.class)
                     .addField("hasDining", boolean.class)
                     .addField("hasOutlet", boolean.class)
