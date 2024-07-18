@@ -72,36 +72,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PlaceImage" />
 
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:numStars="5"
+        android:rating="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="108dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="84dp"
         android:text="add"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleAircon"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
         tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/cancelButton"
+        android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="108dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="104dp"
         android:text="cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleAircon"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
         tools:ignore="HardcodedText" />
 
     <ToggleButton
         android:id="@+id/toggleDining"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:text="dining"
         android:textOff="dining"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
 
@@ -109,7 +122,7 @@
         android:id="@+id/toggleOutlets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:text="outlets"
         android:textOff="outlets"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +134,7 @@
         android:id="@+id/togglePlaceWifi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:text="wifi"
         android:textOff="wifi"
         app:layout_constraintEnd_toStartOf="@+id/toggleDining"

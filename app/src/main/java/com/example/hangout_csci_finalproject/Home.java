@@ -21,6 +21,7 @@ public class Home extends AppCompatActivity {
     private Button UserButtonHome;
     private Button detailButton;
     private Button exploreButton;
+    private Button addPlaceButton;
     private Realm realm;
     private RecyclerView recyclerView;
 
@@ -42,6 +43,7 @@ public class Home extends AppCompatActivity {
         UserButtonHome = findViewById(R.id.userButtonHome);
         detailButton = findViewById(R.id.placedetailbutton);
         exploreButton = findViewById(R.id.explorebutton);
+        addPlaceButton = findViewById(R.id.addPlaceButton);
         recyclerView = findViewById(R.id.recyclerView);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -74,6 +76,13 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        addPlaceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddPlaceButtonClicked(v);
+            }
+        });
+
         exploreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +103,11 @@ public class Home extends AppCompatActivity {
 
     private void onExploreButtonClicked(View v) {
         Intent intent = new Intent(this, ExplorePage.class);
+        startActivity(intent);
+    }
+
+    private void onAddPlaceButtonClicked(View v) {
+        Intent intent = new Intent(this, AddPlacePage.class);
         startActivity(intent);
     }
 

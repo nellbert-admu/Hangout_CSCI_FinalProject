@@ -12,7 +12,7 @@ public class MyApp extends Application {
         Realm.init(this); // for realm
 
         RealmConfiguration config = new RealmConfiguration.Builder()
-                .schemaVersion(1) // for schema changes
+                .schemaVersion(2) // for schema changes
                 .migration(new MyMigration()) //  migration implementation
                 .build();
 

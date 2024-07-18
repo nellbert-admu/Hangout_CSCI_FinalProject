@@ -7,6 +7,9 @@ public class Place extends RealmObject {
     @PrimaryKey
     private String id;
     private String name;
+
+
+
     private boolean dining;
     private boolean outlet;
     private boolean aircon;
@@ -68,4 +71,5 @@ public class Place extends RealmObject {
     public void setWifi(boolean wifi) {
         this.wifi = wifi;
     }
+
 }

@@ -20,12 +20,24 @@ public class MyMigration implements RealmMigration {
                     .addField("hasQuiet", boolean.class)
                     .addField("hasRestroom", boolean.class)
                     .addField("hasWifi", boolean.class);
-
             oldVersion++;
         }
 
         if (oldVersion == 1) {
-            // Perform other migration steps if needed
+            schema.get("Place")
+                    .removeField("hasDining")
+                    .removeField("hasOutlet")
+                    .removeField("hasAircon")
+                    .removeField("hasQuiet")
+                    .removeField("hasRestroom")
+                    .removeField("hasWifi")
+                    .addField("dining", boolean.class)
+                    .addField("outlet", boolean.class)
+                    .addField("aircon", boolean.class)
+                    .addField("quiet", boolean.class)
+                    .addField("restroom", boolean.class)
+                    .addField("wifi", boolean.class);
+            oldVersion++;
         }
     }
 }

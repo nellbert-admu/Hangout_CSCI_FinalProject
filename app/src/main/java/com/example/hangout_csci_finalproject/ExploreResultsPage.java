@@ -37,12 +37,12 @@ public class ExploreResultsPage extends AppCompatActivity {
     private void performSearch(String query, boolean isDining, boolean isOutlet, boolean isAircon, boolean isQuiet, boolean isRestroom, boolean isWifi) {
         RealmResults<Place> results = realm.where(Place.class)
                 .contains("name", query, Case.INSENSITIVE)
-                .equalTo("hasDining", isDining)
-                .equalTo("hasOutlet", isOutlet)
-                .equalTo("hasAircon", isAircon)
-                .equalTo("hasQuiet", isQuiet)
-                .equalTo("hasRestroom", isRestroom)
-                .equalTo("hasWifi", isWifi)
+                .equalTo("dining", isDining)
+                .equalTo("outlet", isOutlet)
+                .equalTo("aircon", isAircon)
+                .equalTo("quiet", isQuiet)
+                .equalTo("restroom", isRestroom)
+                .equalTo("wifi", isWifi)
                 .findAll();
 
         placeAdapter = new PlaceAdapter(results);
