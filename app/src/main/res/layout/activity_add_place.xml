@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/PlaceImage"
-        android:layout_width="278dp"
-        android:layout_height="180dp"
+        android:layout_width="229dp"
+        android:layout_height="122dp"
         android:layout_marginTop="19dp"
         android:importantForAccessibility="no"
         android:importantForAutofill="no"
@@ -21,15 +21,15 @@
 
     <EditText
         android:id="@+id/editDesc"
-        android:layout_width="285dp"
-        android:layout_height="94dp"
+        android:layout_width="279dp"
+        android:layout_height="85dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="add a review..."
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPlaceLoc" />
 
@@ -48,15 +48,16 @@
 
     <EditText
         android:id="@+id/editPlaceLoc"
-        android:layout_width="273dp"
+        android:layout_width="278dp"
         android:layout_height="48dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="12dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="where is it?"
         android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPlaceName" />
 
@@ -88,57 +89,36 @@
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="16dp"
         android:text="add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.34"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+        app:layout_constraintTop_toBottomOf="@+id/toggleAircon"
         tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="104dp"
+        android:layout_marginTop="16dp"
         android:text="cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+        app:layout_constraintHorizontal_bias="0.158"
+        app:layout_constraintStart_toEndOf="@+id/addButton"
+        app:layout_constraintTop_toBottomOf="@+id/toggleAircon"
         tools:ignore="HardcodedText" />
 
     <ToggleButton
         android:id="@+id/toggleDining"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="68dp"
         android:text="dining"
         android:textOff="dining"
+        android:textOn="dining"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editDesc" />
-
-    <ToggleButton
-        android:id="@+id/toggleOutlets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="outlets"
-        android:textOff="outlets"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/toggleDining"
-        app:layout_constraintTop_toBottomOf="@+id/editDesc" />
-
-    <ToggleButton
-        android:id="@+id/togglePlaceWifi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="wifi"
-        android:textOff="wifi"
-        app:layout_constraintEnd_toStartOf="@+id/toggleDining"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDesc" />
 
@@ -147,34 +127,66 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:text="quiet"
         android:textOff="quiet"
+        android:textOn="quiet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/toggleAircon"
         app:layout_constraintTop_toBottomOf="@+id/toggleOutlets" />
 
     <ToggleButton
+        android:id="@+id/toggleAircon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="aircon"
+        android:textOff="aircon"
+        android:textOn="aircon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toggleDining" />
+
+    <ToggleButton
+        android:id="@+id/togglePlaceWifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="wifi"
+        android:textOff="wifi"
+        android:textOn="wifi"
+        app:layout_constraintEnd_toStartOf="@+id/toggleDining"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editDesc" />
+
+    <ToggleButton
         android:id="@+id/toggleRestrooms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:text="restrooms"
         android:textOff="restroom"
+        android:textOn="restroom"
         app:layout_constraintEnd_toStartOf="@+id/toggleAircon"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/togglePlaceWifi" />
 
     <ToggleButton
-        android:id="@+id/toggleAircon"
+        android:id="@+id/toggleOutlets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="aircon"
-        android:textOff="aircon"
+        android:layout_marginTop="68dp"
+        android:text="outlets"
+        android:textOff="outlets"
+        android:textOn="outlets"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleDining" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/toggleDining"
+        app:layout_constraintTop_toBottomOf="@+id/editDesc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

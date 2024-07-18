@@ -65,18 +65,20 @@ public class AddPlacePage extends AppCompatActivity {
     private void addNewPlace() {
         String placeName = placeNameView.getText().toString();
         String location = locationView.getText().toString();
+        String description = descriptionView.getText().toString();
+        // String userUuid = getUuid(); // This method should return the UUID of the current user
 
         if (placeName.isEmpty() || location.isEmpty()) {
-            // Show an error message to the user
             Toast.makeText(this, "Place name and location cannot be empty", Toast.LENGTH_SHORT).show();
-            return; // Exit the method early
+            return;
         }
 
         realm.beginTransaction();
         Place place = realm.createObject(Place.class);
         place.setName(placeName);
         place.setLocation(location);
-        place.setDescription(descriptionView.getText().toString());
+        place.setDescription(description);
+        // place.setUserUuid(userUuid); // Set the user's UUID
         place.setDining(toggleDining.isChecked());
         place.setOutlet(toggleOutlets.isChecked());
         place.setAircon(toggleAircon.isChecked());

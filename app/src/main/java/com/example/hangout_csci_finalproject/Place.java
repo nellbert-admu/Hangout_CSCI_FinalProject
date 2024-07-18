@@ -6,6 +6,7 @@ import io.realm.annotations.PrimaryKey;
 public class Place extends RealmObject {
     @PrimaryKey
     private String id;
+    private String userUuid;
     private String name;
 
     private String location;
@@ -23,6 +24,13 @@ public class Place extends RealmObject {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
+    public String getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(String userUuid) {
+        this.userUuid = userUuid;
+    }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
