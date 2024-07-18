@@ -51,6 +51,12 @@ public class LoginPage extends AppCompatActivity {
         signInButton.setOnClickListener(v -> signIn());
         registerButton.setOnClickListener(v -> goToRegister());
         clearButton.setOnClickListener(v -> clearPreferences());
+
+        rememberBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("rememberMe", isChecked);
+            editor.apply();
+        });
     }
 
     private void checkRememberMe() {
@@ -70,16 +76,23 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void signIn() {
-        User result = realm.where(User.class).equalTo("name", usernameInput.getText().toString()).findFirst();
-        if (result != null && result.getPassword().equals(passwordInput.getText().toString())) {
+        String username = usernameInput.getText().toString();
+        String password = passwordInput.getText().toString();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Username and password cannot be empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        User result = realm.where(User.class).equalTo("name", username).findFirst();
+        if (result != null && result.getPassword().equals(password)) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", result.getUuid());
             editor.apply();
             Intent inside = new Intent(this, Home.class);
-            inside.putExtra("USER_UUID", result.getUuid()); // Send the UUID as an extra
             startActivity(inside);
         } else {
-            Toast.makeText(this, "Incorrect Credentials", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, result == null ? "Incorrect Credentials" : "Incorrect password", Toast.LENGTH_LONG).show();
         }
     }
 

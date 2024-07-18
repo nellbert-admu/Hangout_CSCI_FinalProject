@@ -1,6 +1,7 @@
 package com.example.hangout_csci_finalproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -66,7 +67,9 @@ public class AddPlacePage extends AppCompatActivity {
         String placeName = placeNameView.getText().toString();
         String location = locationView.getText().toString();
         String description = descriptionView.getText().toString();
-        // String userUuid = getUuid(); // This method should return the UUID of the current user
+
+        SharedPreferences prefs = getSharedPreferences("my_prefs", MODE_PRIVATE);
+        String userUuid = prefs.getString("UUID", "");
 
         if (placeName.isEmpty() || location.isEmpty()) {
             Toast.makeText(this, "Place name and location cannot be empty", Toast.LENGTH_SHORT).show();
@@ -78,7 +81,7 @@ public class AddPlacePage extends AppCompatActivity {
         place.setName(placeName);
         place.setLocation(location);
         place.setDescription(description);
-        // place.setUserUuid(userUuid); // Set the user's UUID
+        place.setUserUuid(userUuid);
         place.setDining(toggleDining.isChecked());
         place.setOutlet(toggleOutlets.isChecked());
         place.setAircon(toggleAircon.isChecked());

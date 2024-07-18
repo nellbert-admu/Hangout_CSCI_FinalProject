@@ -56,6 +56,11 @@ public class Home extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         // query ??
 
+        RealmResults<Place> list = realm.where(Place.class).findAll();
+        adapter = new PlaceAdapter(list);
+        recyclerView.setAdapter(adapter);
+
+
         UserButtonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
