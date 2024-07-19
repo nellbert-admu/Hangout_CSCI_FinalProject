@@ -14,6 +14,7 @@ public class MyApp extends Application {
 
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .schemaVersion(1) // for schema changes
+                .allowWritesOnUiThread(true) // for allowing writes on UI thread
                 .deleteRealmIfMigrationNeeded() //  migration implementation
                 .build();
 

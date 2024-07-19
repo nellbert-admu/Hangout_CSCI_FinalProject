@@ -1,10 +1,8 @@
 package com.example.hangout_csci_finalproject;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
@@ -12,27 +10,27 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.UUID;
+
 import io.realm.Realm;
 
 public class AddPlacePage extends AppCompatActivity {
-    private Realm realm;
-    private EditText placeNameView;
-    private EditText locationView;
-    private EditText descriptionView;
-    private ToggleButton toggleDining;
-    private ToggleButton toggleOutlets;
-    private ToggleButton toggleAircon;
-    private ToggleButton toggleQuiet;
-    private ToggleButton toggleRestrooms;
-    private ToggleButton toggleWifi;
+    private EditText placeNameView, locationView, descriptionView;
+    private ToggleButton toggleDining, toggleOutlets, toggleAircon, toggleQuiet, toggleRestrooms, toggleWifi;
     private RatingBar ratingBar;
-    private Button addButton;
-    private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
+        initViews();
+        Realm realm = Realm.getDefaultInstance();
+
+        findViewById(R.id.addButton).setOnClickListener(v -> addNewPlace(realm));
+        findViewById(R.id.back_button).setOnClickListener(v -> finish());
+    }
+
+    private void initViews() {
         placeNameView = findViewById(R.id.editPlaceName);
         locationView = findViewById(R.id.editPlaceLoc);
         descriptionView = findViewById(R.id.editDesc);
@@ -43,45 +41,25 @@ public class AddPlacePage extends AppCompatActivity {
         toggleRestrooms = findViewById(R.id.toggleRestrooms);
         toggleWifi = findViewById(R.id.togglePlaceWifi);
         ratingBar = findViewById(R.id.ratingBar);
-        addButton = findViewById(R.id.addButton);
-        backButton = findViewById(R.id.back_button);
-
-        realm = Realm.getDefaultInstance();
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNewPlace();
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackButtonClicked();
-            }
-        });
     }
 
-    private void addNewPlace() {
+    private void addNewPlace(Realm realm) {
         String placeName = placeNameView.getText().toString();
         String location = locationView.getText().toString();
-        String description = descriptionView.getText().toString();
-
-        SharedPreferences prefs = getSharedPreferences("my_prefs", MODE_PRIVATE);
-        String userUuid = prefs.getString("UUID", "");
-
         if (placeName.isEmpty() || location.isEmpty()) {
             Toast.makeText(this, "Place name and location cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Generate a unique String ID for the new Place object
+        String uniqueId = UUID.randomUUID().toString();
+
         realm.beginTransaction();
-        Place place = realm.createObject(Place.class);
+        Place place = realm.createObject(Place.class, uniqueId); // Adjusted to use createObject with ID
         place.setName(placeName);
         place.setLocation(location);
-        place.setDescription(description);
-        place.setUserUuid(userUuid);
+        place.setDescription(descriptionView.getText().toString());
+        place.setUserUuid(getSharedPreferences("my_prefs", MODE_PRIVATE).getString("UUID", ""));
         place.setDining(toggleDining.isChecked());
         place.setOutlet(toggleOutlets.isChecked());
         place.setAircon(toggleAircon.isChecked());
@@ -90,20 +68,16 @@ public class AddPlacePage extends AppCompatActivity {
         place.setWifi(toggleWifi.isChecked());
         realm.commitTransaction();
 
+        long placeCount = realm.where(Place.class).count();
+        long userCount = realm.where(User.class).count();
+        Log.d("RealmCounts", "Places: " + placeCount + ", Users: " + userCount);
+
+        setResult(Activity.RESULT_OK);
         finish();
     }
-
-    private void onBackButtonClicked() {
-        Intent intent = new Intent(this, Home.class);
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (realm != null) {
-            realm.close();
-        }
+        Realm.getDefaultInstance().close();
     }
 }

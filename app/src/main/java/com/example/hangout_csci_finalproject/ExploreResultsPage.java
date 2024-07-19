@@ -1,6 +1,7 @@
 package com.example.hangout_csci_finalproject;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,8 +46,8 @@ public class ExploreResultsPage extends AppCompatActivity {
                 .equalTo("wifi", isWifi)
                 .findAll();
 
-        placeAdapter = new PlaceAdapter(results);
-        recyclerView.setAdapter(placeAdapter);
+        //placeAdapter = new PlaceAdapter(results);
+        //recyclerView.setAdapter(placeAdapter);
     }
 
     @Override
