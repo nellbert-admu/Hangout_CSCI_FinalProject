@@ -17,20 +17,10 @@ public class Place extends RealmObject {
     private boolean restroom;
     private boolean wifi;
     private float rating;
-    private String path;
 
     // Getters and setters
-
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
 
     public String getUserUuid() {
         return userUuid;

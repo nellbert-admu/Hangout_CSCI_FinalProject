@@ -1,24 +1,16 @@
 package com.example.hangout_csci_finalproject;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import io.realm.Realm;
 
 public class PlaceDetail extends AppCompatActivity {
-    private TextView placeNameView, locationView, descriptionView;
-    private ToggleButton toggleDining, toggleOutlets, toggleAircon, toggleQuiet, toggleRestrooms, toggleWifi;
+    private TextView placeNameView, locationView, descriptionView, featuresView;
     private RatingBar ratingBar;
     private String placeId;
     private Realm realm;
@@ -26,18 +18,17 @@ public class PlaceDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_placedetail);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
         realm = Realm.getDefaultInstance();
         initViews();
-        placeId = getIntent().getStringExtra("placeId");
+        placeId = getIntent().getStringExtra("place_id");
+
         if (placeId != null) {
             loadPlaceData(placeId);
+        } else {
+            Toast.makeText(this, "Error loading place details", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
@@ -47,13 +38,14 @@ public class PlaceDetail extends AppCompatActivity {
         placeNameView = findViewById(R.id.placeName);
         locationView = findViewById(R.id.placeLocation);
         descriptionView = findViewById(R.id.placeDescription);
-        toggleDining = findViewById(R.id.toggleDining);
-        toggleOutlets = findViewById(R.id.toggleOutlets);
-        toggleAircon = findViewById(R.id.toggleAircon);
-        toggleQuiet = findViewById(R.id.toggleQuiet);
-        toggleRestrooms = findViewById(R.id.toggleRestrooms);
-        toggleWifi = findViewById(R.id.togglePlaceWifi);
+        featuresView = findViewById(R.id.placeFeatures);
         ratingBar = findViewById(R.id.ratingBar);
+
+        // Set fields to be read-only
+        placeNameView.setEnabled(false);
+        locationView.setEnabled(false);
+        descriptionView.setEnabled(false);
+        ratingBar.setIsIndicator(true);
     }
 
     private void loadPlaceData(String placeId) {
@@ -62,20 +54,27 @@ public class PlaceDetail extends AppCompatActivity {
             placeNameView.setText(place.getName());
             locationView.setText(place.getLocation());
             descriptionView.setText(place.getDescription());
-            toggleDining.setChecked(place.isDining());
-            toggleOutlets.setChecked(place.isOutlet());
-            toggleAircon.setChecked(place.isAircon());
-            toggleQuiet.setChecked(place.isQuiet());
-            toggleRestrooms.setChecked(place.isRestroom());
-            toggleWifi.setChecked(place.isWifi());
             ratingBar.setRating(place.getRating());
+
+            StringBuilder features = new StringBuilder();
+            if (place.isDining()) features.append("#dining ");
+            if (place.isOutlet()) features.append("#outlets ");
+            if (place.isAircon()) features.append("#aircon ");
+            if (place.isQuiet()) features.append("#quiet ");
+            if (place.isRestroom()) features.append("#restrooms ");
+            if (place.isWifi()) features.append("#wifi ");
+
+            featuresView.setText(features.toString().trim());
+        } else {
+            Toast.makeText(this, "Place not found", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!realm.isClosed()) {
+        if (realm != null && !realm.isClosed()) {
             realm.close();
         }
     }

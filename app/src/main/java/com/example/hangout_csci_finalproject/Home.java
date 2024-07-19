@@ -37,7 +37,7 @@ public class Home extends AppCompatActivity {
         setupUI();
         realm = Realm.getDefaultInstance();
         setupRecyclerView();
-        applyFilters(); // Load preferences and apply filters
+        applyFiltersFromIntent(); // Apply filters when the activity is created
     }
 
     private void setupWindowInsets() {
@@ -66,18 +66,26 @@ public class Home extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void applyFilters() {
-        // Load saved preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("explore_prefs", MODE_PRIVATE);
-        String query = sharedPreferences.getString("QUERY", "");
-        boolean isDining = sharedPreferences.getBoolean("DINING", false);
-        boolean isOutlet = sharedPreferences.getBoolean("OUTLET", false);
-        boolean isAircon = sharedPreferences.getBoolean("AIRCON", false);
-        boolean isQuiet = sharedPreferences.getBoolean("QUIET", false);
-        boolean isRestroom = sharedPreferences.getBoolean("RESTROOM", false);
-        boolean isWifi = sharedPreferences.getBoolean("WIFI", false);
+    private void applyFiltersFromIntent() {
+        Intent intent = getIntent();
+        String query = intent.getStringExtra("QUERY");
+        boolean isDining = intent.getBooleanExtra("DINING", false);
+        boolean isOutlet = intent.getBooleanExtra("OUTLET", false);
+        boolean isAircon = intent.getBooleanExtra("AIRCON", false);
+        boolean isQuiet = intent.getBooleanExtra("QUIET", false);
+        boolean isRestroom = intent.getBooleanExtra("RESTROOM", false);
+        boolean isWifi = intent.getBooleanExtra("WIFI", false);
+        boolean filtersCleared = intent.getBooleanExtra("FILTERS_CLEARED", false);
 
         RealmQuery<Place> realmQuery = realm.where(Place.class);
+
+        if (filtersCleared) {
+            // Load all places if filters are cleared
+            RealmResults<Place> allPlaces = realmQuery.findAll();
+            adapter = new PlaceAdapter(this, allPlaces, true);
+            recyclerView.setAdapter(adapter);
+            return;
+        }
 
         // Apply search query
         if (query != null && !query.isEmpty()) {
@@ -146,7 +154,7 @@ public class Home extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            applyFilters(); // Re-apply filters when returning from another activity
+            applyFiltersFromIntent(); // Re-apply filters when returning from another activity
         }
     }
 

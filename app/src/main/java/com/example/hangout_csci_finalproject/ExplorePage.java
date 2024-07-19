@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ExplorePage extends AppCompatActivity {
     private EditText editTextQuery;
     private CheckBox dining, outlet, aircon, quiet, restroom, wifi;
-    private Button searchButton, clearButton, backButton;
+    private Button searchButton, clearButton;
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "explore_prefs";
 
@@ -27,7 +27,6 @@ public class ExplorePage extends AppCompatActivity {
         editTextQuery = findViewById(R.id.search);
         searchButton = findViewById(R.id.search_button);
         clearButton = findViewById(R.id.clear_button);
-        backButton = findViewById(R.id.back_button);
         dining = findViewById(R.id.dining);
         outlet = findViewById(R.id.outlet);
         aircon = findViewById(R.id.aircon);
@@ -35,8 +34,8 @@ public class ExplorePage extends AppCompatActivity {
         restroom = findViewById(R.id.restroom);
         wifi = findViewById(R.id.wifi);
 
-        loadCheckboxStates(); // Load checkbox states
-        loadSearchQuery(); // Load search query
+        loadCheckboxStates();
+        loadSearchQuery();
 
         searchButton.setOnClickListener(v -> {
             String query = editTextQuery.getText().toString();
@@ -47,8 +46,8 @@ public class ExplorePage extends AppCompatActivity {
             boolean isRestroom = restroom.isChecked();
             boolean isWifi = wifi.isChecked();
 
-            saveSearchQuery(query); // Save search query
-            saveCheckboxStates(); // Save checkbox states
+            saveSearchQuery(query);
+            saveCheckboxStates();
 
             Intent intent = new Intent(ExplorePage.this, Home.class);
             intent.putExtra("QUERY", query);
@@ -71,17 +70,13 @@ public class ExplorePage extends AppCompatActivity {
             restroom.setChecked(false);
             wifi.setChecked(false);
 
-            // Clear saved states
+
             clearSavedStates();
 
-            // Show Toast message
+
             Toast.makeText(ExplorePage.this, "Fields cleared", Toast.LENGTH_SHORT).show();
         });
 
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, Home.class);
-            startActivity(intent);
-        });
     }
 
     private void clearSavedStates() {

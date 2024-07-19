@@ -8,7 +8,7 @@ import io.realm.annotations.PrimaryKey;
 public class User extends RealmObject
 {
     @PrimaryKey
-    private String uuid = UUID.randomUUID().toString();
+    private String uuid = UUID.randomUUID().toString();;
     private String name;
     private String password;
 

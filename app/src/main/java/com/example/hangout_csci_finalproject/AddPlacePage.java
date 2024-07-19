@@ -1,23 +1,15 @@
 package com.example.hangout_csci_finalproject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.UUID;
 
 import io.realm.Realm;
@@ -30,14 +22,34 @@ import io.realm.Realm;
  */
 
 public class AddPlacePage extends AppCompatActivity {
-
     private EditText placeNameView, locationView, descriptionView;
     private ToggleButton toggleDining, toggleOutlets, toggleAircon, toggleQuiet, toggleRestrooms, toggleWifi;
     private RatingBar ratingBar;
-    File finalImageFile;
-    private ImageView PlaceImage;
-    private Realm realm;
-    private Place newPlace = new Place();
+
+    /**
+     * Initializes the activity, views, and sets up listeners for the add and back buttons.
+     * It also initializes the Realm database instance.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise, it is null.
+     */
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_place);
+        initViews();
+        Realm realm = Realm.getDefaultInstance();
+
+        findViewById(R.id.editButton).setOnClickListener(v -> addNewPlace(realm));
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            // handle the rating value (rating) if needed immediately
+
+        });
+    }
+
     /**
      * Initializes the views by finding them by their IDs.
      */
@@ -55,29 +67,12 @@ public class AddPlacePage extends AppCompatActivity {
     }
 
     /**
-     * Initializes the activity, views, and sets up listeners for the add and back buttons.
-     * It also initializes the Realm database instance.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
-     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
-     *                           Otherwise, it is null.
+     * Adds a new place to the Realm database with the details provided by the user.
+     * It generates a unique ID for each place, collects all the information from the input fields,
+     * and saves the new place object to the database.
+     * @param realm The Realm database instance where the new place will be added.
      */
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_place);
-        initViews();
-        realm = Realm.getDefaultInstance();
-
-        findViewById(R.id.editButton).setOnClickListener(v -> addNewPlace());
-        findViewById(R.id.backButton).setOnClickListener(v -> finish());
-
-        PlaceImage = findViewById(R.id.PlaceImage);
-        PlaceImage.setOnClickListener(v -> takePic());
-    }
-
-    private void addNewPlace() {
+    private void addNewPlace(Realm realm) {
         String placeName = placeNameView.getText().toString();
         String location = locationView.getText().toString();
         if (placeName.isEmpty() || location.isEmpty()) {
@@ -85,20 +80,23 @@ public class AddPlacePage extends AppCompatActivity {
             return;
         }
 
-        realm.executeTransaction(r -> {
-            newPlace.setName(placeName);
-            newPlace.setLocation(location);
-            newPlace.setDescription(descriptionView.getText().toString());
-            newPlace.setUserUuid(getSharedPreferences("my_prefs", MODE_PRIVATE).getString("UUID", ""));
-            newPlace.setDining(toggleDining.isChecked());
-            newPlace.setOutlet(toggleOutlets.isChecked());
-            newPlace.setAircon(toggleAircon.isChecked());
-            newPlace.setQuiet(toggleQuiet.isChecked());
-            newPlace.setRestroom(toggleRestrooms.isChecked());
-            newPlace.setWifi(toggleWifi.isChecked());
-            newPlace.setRating(ratingBar.getRating());
-            r.copyToRealmOrUpdate(newPlace);
-        });
+
+        String uniqueId = UUID.randomUUID().toString();
+
+        realm.beginTransaction();
+        Place place = realm.createObject(Place.class, uniqueId);
+        place.setName(placeName);
+        place.setLocation(location);
+        place.setDescription(descriptionView.getText().toString());
+        place.setUserUuid(getSharedPreferences("my_prefs", MODE_PRIVATE).getString("UUID", ""));
+        place.setDining(toggleDining.isChecked());
+        place.setOutlet(toggleOutlets.isChecked());
+        place.setAircon(toggleAircon.isChecked());
+        place.setQuiet(toggleQuiet.isChecked());
+        place.setRestroom(toggleRestrooms.isChecked());
+        place.setWifi(toggleWifi.isChecked());
+        place.setRating(ratingBar.getRating());
+        realm.commitTransaction();
 
         long placeCount = realm.where(Place.class).count();
         long userCount = realm.where(User.class).count();
@@ -106,53 +104,6 @@ public class AddPlacePage extends AppCompatActivity {
 
         setResult(Activity.RESULT_OK);
         finish();
-    }
-
-    public void takePic() {
-        Intent i = new Intent(this, ImageActivity.class);
-        startActivityForResult(i, 0);
-    }
-
-    public void onActivityResult(int requestCode, int responseCode, Intent data) {
-        super.onActivityResult(requestCode, responseCode, data);
-        if (requestCode == 0 && responseCode == ImageActivity.RESULT_CODE_IMAGE_TAKEN) {
-            try {
-                byte[] jpeg = data.getByteArrayExtra("rawJpeg");
-                if (jpeg != null) {
-                    finalImageFile = new File(getExternalCacheDir(), UUID.randomUUID().toString() + ".jpeg");
-                    try (FileOutputStream fos = new FileOutputStream(finalImageFile)) {
-                        fos.write(jpeg);
-                        realm.executeTransaction(r -> {
-                            newPlace.setPath(finalImageFile.getName());
-                            r.copyToRealmOrUpdate(newPlace);
-                        });
-                        Picasso.get().load(finalImageFile).networkPolicy(NetworkPolicy.NO_CACHE).memoryPolicy(MemoryPolicy.NO_CACHE).into(PlaceImage);
-                    }
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, "Error saving image", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void loadimageViewImage() {
-        File getImageDir = getExternalCacheDir();
-
-        if (newPlace.getPath() != null) {
-            File file = new File(getImageDir, newPlace.getPath());
-
-            if (file.exists()) {
-                Picasso.get()
-                        .load(file)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .into(PlaceImage);
-            } else {
-                PlaceImage.setImageResource(R.mipmap.ic_launcher);
-            }
-        } else {
-            PlaceImage.setImageResource(R.mipmap.ic_launcher);
-        }
     }
 
     /**
