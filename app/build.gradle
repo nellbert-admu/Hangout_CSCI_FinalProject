@@ -31,14 +31,11 @@ android {
 
 dependencies {
 
-    /*
     // CAMERA
     implementation files('libs/Android-Image-Cropper-release.aar')
     implementation "androidx.exifinterface:exifinterface:1.3.6"
 
     implementation 'com.squareup.picasso:picasso:2.71828'
-    */
-
     
     // PERMISSIONS
     implementation 'com.karumi:dexter:6.2.1'

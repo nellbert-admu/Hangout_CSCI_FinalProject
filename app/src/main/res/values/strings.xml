@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Hangout_CSCI_FinalProject</string>
+    <string name="fileAuthority">com.example.hangout_csci_finalproject</string>
 </resources>

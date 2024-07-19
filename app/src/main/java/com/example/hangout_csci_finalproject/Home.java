@@ -72,7 +72,6 @@ public class Home extends AppCompatActivity {
         textView.setText("welcome, " + user.getName() + ". where to?");
 
         findViewById(R.id.userButtonHome).setOnClickListener(v -> gotoUserPage());
-        findViewById(R.id.placedetailbutton).setOnClickListener(v -> startActivity(new Intent(this, PlaceDetail.class)));
         findViewById(R.id.explorebutton).setOnClickListener(v -> startActivity(new Intent(this, ExplorePage.class)));
         findViewById(R.id.addPlaceButton).setOnClickListener(v -> startActivityForResult(new Intent(this, AddPlacePage.class), ADD_PLACE_REQUEST_CODE));
     }

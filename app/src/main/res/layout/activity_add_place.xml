@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AddPlaceTitle"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        tools:srcCompat="@android:drawable/ic_menu_add" />
 
     <EditText
         android:id="@+id/editDesc"
