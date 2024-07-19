@@ -1,10 +1,8 @@
 package com.example.hangout_csci_finalproject;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +15,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
+/**
+ * Activity for editing the user's profile.
+ * This activity allows users to update their username and password.
+ * It uses Realm for data persistence and SharedPreferences for session management.
+ */
 public class EditProfilePage extends AppCompatActivity {
 
+    // UI components
     EditText UsernameInputEdit;
     EditText PasswordInputEdit;
     EditText ConfirmPasswordInputEdit;
@@ -29,6 +32,13 @@ public class EditProfilePage extends AppCompatActivity {
     SharedPreferences prefs;
     Realm realm;
 
+    /**
+     * Sets up the UI and initializes components on activity creation.
+     * Applies Edge-to-Edge configuration for immersive experience.
+     * Initializes Realm and SharedPreferences to fetch and display the current user's information.
+     *
+     * @param savedInstanceState Contains data supplied in onSaveInstanceState(Bundle) if the activity is re-initialized.
+     */
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +51,7 @@ public class EditProfilePage extends AppCompatActivity {
             return insets;
         });
 
-        // Views Initialization
-
+        // Initialize UI components
         UsernameInputEdit = findViewById(R.id.usernameInputEdit);
         PasswordInputEdit = findViewById(R.id.passwordInputEdit);
         ConfirmPasswordInputEdit = findViewById(R.id.confirmPasswordInputEdit);
@@ -63,27 +72,32 @@ public class EditProfilePage extends AppCompatActivity {
             }
         });
 
-        // Realm Initialization
-
+        // Initialize Realm and SharedPreferences
         realm = Realm.getDefaultInstance();
-
-        prefs = getSharedPreferences("my_prefs",MODE_PRIVATE);
+        prefs = getSharedPreferences("my_prefs", MODE_PRIVATE);
         String UUID = prefs.getString("UUID", "");
 
+        // Fetch and display current user's information
         User result = realm.where(User.class)
                 .equalTo("uuid", UUID)
                 .findFirst();
 
-        UsernameInputEdit.setText(result.getName());
-        PasswordInputEdit.setText(result.getPassword());
+        if (result != null) {
+            UsernameInputEdit.setText(result.getName());
+        }
     }
 
+    /**
+     * Saves the updated user information to Realm and SharedPreferences.
+     * Validates input fields before saving. Displays appropriate toast messages for validation errors or success.
+     */
     public void saveFunction()
     {
         String username = UsernameInputEdit.getText().toString();
         String password = PasswordInputEdit.getText().toString();
         String confirmPassword = ConfirmPasswordInputEdit.getText().toString();
 
+        // Input validation
         if (username.isEmpty()){
             Toast toast = Toast.makeText(this, "Name must not be blank", Toast.LENGTH_LONG);
             toast.show();
@@ -96,9 +110,8 @@ public class EditProfilePage extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "Confirm password do not match", Toast.LENGTH_LONG);
             toast.show();
         }
-        else
-        {
-            // Obtain current user
+        else {
+            // Update user information in Realm and SharedPreferences
             prefs = getSharedPreferences("my_prefs",MODE_PRIVATE);
             String UUID = prefs.getString("UUID", "");
 
@@ -142,6 +155,9 @@ public class EditProfilePage extends AppCompatActivity {
         }
     }
 
+    /**
+     * Closes the Realm instance when the activity is destroyed to prevent memory leaks.
+     */
     public void onDestroy() {
         super.onDestroy();
 

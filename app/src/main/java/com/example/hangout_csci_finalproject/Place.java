@@ -8,17 +8,15 @@ public class Place extends RealmObject {
     private String id;
     private String userUuid;
     private String name;
-
     private String location;
-
     private String description;
-
     private boolean dining;
     private boolean outlet;
     private boolean aircon;
     private boolean quiet;
     private boolean restroom;
     private boolean wifi;
+    private float rating;
 
     // Getters and setters
     public String getId() { return id; }
@@ -82,6 +80,13 @@ public class Place extends RealmObject {
         this.wifi = wifi;
     }
 
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
     public String getLocation() {
         return location;
     }

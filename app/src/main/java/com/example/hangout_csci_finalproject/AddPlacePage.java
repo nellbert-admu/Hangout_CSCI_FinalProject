@@ -14,10 +14,26 @@ import java.util.UUID;
 
 import io.realm.Realm;
 
+/**
+ * Activity for adding a new place in the application.
+ * This activity allows users to input details about a new place,
+ * including its name, location, description, and various attributes like dining, outlets, etc.
+ * It also includes a rating bar for users to rate the place.
+ */
+
 public class AddPlacePage extends AppCompatActivity {
     private EditText placeNameView, locationView, descriptionView;
     private ToggleButton toggleDining, toggleOutlets, toggleAircon, toggleQuiet, toggleRestrooms, toggleWifi;
     private RatingBar ratingBar;
+
+    /**
+     * Initializes the activity, views, and sets up listeners for the add and back buttons.
+     * It also initializes the Realm database instance.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise, it is null.
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +44,15 @@ public class AddPlacePage extends AppCompatActivity {
 
         findViewById(R.id.addButton).setOnClickListener(v -> addNewPlace(realm));
         findViewById(R.id.back_button).setOnClickListener(v -> finish());
+        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            // handle the rating value (rating) if needed immediately
+
+        });
     }
 
+    /**
+     * Initializes the views by finding them by their IDs.
+     */
     private void initViews() {
         placeNameView = findViewById(R.id.editPlaceName);
         locationView = findViewById(R.id.editPlaceLoc);
@@ -43,6 +66,12 @@ public class AddPlacePage extends AppCompatActivity {
         ratingBar = findViewById(R.id.ratingBar);
     }
 
+    /**
+     * Adds a new place to the Realm database with the details provided by the user.
+     * It generates a unique ID for each place, collects all the information from the input fields,
+     * and saves the new place object to the database.
+     * @param realm The Realm database instance where the new place will be added.
+     */
     private void addNewPlace(Realm realm) {
         String placeName = placeNameView.getText().toString();
         String location = locationView.getText().toString();
@@ -51,11 +80,11 @@ public class AddPlacePage extends AppCompatActivity {
             return;
         }
 
-        // Generate a unique String ID for the new Place object
+
         String uniqueId = UUID.randomUUID().toString();
 
         realm.beginTransaction();
-        Place place = realm.createObject(Place.class, uniqueId); // Adjusted to use createObject with ID
+        Place place = realm.createObject(Place.class, uniqueId);
         place.setName(placeName);
         place.setLocation(location);
         place.setDescription(descriptionView.getText().toString());
@@ -66,6 +95,7 @@ public class AddPlacePage extends AppCompatActivity {
         place.setQuiet(toggleQuiet.isChecked());
         place.setRestroom(toggleRestrooms.isChecked());
         place.setWifi(toggleWifi.isChecked());
+        place.setRating(ratingBar.getRating());
         realm.commitTransaction();
 
         long placeCount = realm.where(Place.class).count();
@@ -75,6 +105,10 @@ public class AddPlacePage extends AppCompatActivity {
         setResult(Activity.RESULT_OK);
         finish();
     }
+
+    /**
+     * Closes the Realm instance when the activity is destroyed to prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
