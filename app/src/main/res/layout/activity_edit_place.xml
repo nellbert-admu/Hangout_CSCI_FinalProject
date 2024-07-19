@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddPlacePage">
+    tools:context=".EditPlacePage">
 
     <ImageView
         android:id="@+id/PlaceImage"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:importantForAutofill="no"
-        android:text="add new hangout."
+        android:text="edit your hangout."
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="add"
+        android:text="edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.34"
         app:layout_constraintStart_toStartOf="parent"
@@ -188,5 +188,4 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/toggleDining"
         app:layout_constraintTop_toBottomOf="@+id/editDesc" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

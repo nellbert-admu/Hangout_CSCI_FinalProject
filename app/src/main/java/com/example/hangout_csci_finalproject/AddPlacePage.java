@@ -42,8 +42,8 @@ public class AddPlacePage extends AppCompatActivity {
         initViews();
         Realm realm = Realm.getDefaultInstance();
 
-        findViewById(R.id.addButton).setOnClickListener(v -> addNewPlace(realm));
-        findViewById(R.id.back_button).setOnClickListener(v -> finish());
+        findViewById(R.id.editButton).setOnClickListener(v -> addNewPlace(realm));
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
         ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             // handle the rating value (rating) if needed immediately
 

@@ -1,7 +1,9 @@
 package com.example.hangout_csci_finalproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -24,8 +26,10 @@ public class Home extends AppCompatActivity {
 
     private static final int ADD_PLACE_REQUEST_CODE = 1; // Request code for adding a new place.
     private Realm realm; // Instance of Realm for database operations.
+    private TextView textView;
     private RecyclerView recyclerView; // RecyclerView for displaying the list of places.
     private PlaceAdapter adapter; // Adapter for the RecyclerView.
+    private SharedPreferences prefs;
 
     /**
      * Initializes the activity, sets up UI components, and prepares the RecyclerView.
@@ -60,6 +64,13 @@ public class Home extends AppCompatActivity {
      * Sets up UI components by assigning click listeners to buttons.
      */
     private void setupUI() {
+        textView = findViewById(R.id.textView);
+        prefs = getSharedPreferences("my_prefs", MODE_PRIVATE);
+        String UUID = prefs.getString("UUID", "");
+        realm = Realm.getDefaultInstance();
+        User user = realm.where(User.class).equalTo("uuid", UUID).findFirst();
+        textView.setText("welcome, " + user.getName() + ". where to?");
+
         findViewById(R.id.userButtonHome).setOnClickListener(v -> gotoUserPage());
         findViewById(R.id.placedetailbutton).setOnClickListener(v -> startActivity(new Intent(this, PlaceDetail.class)));
         findViewById(R.id.explorebutton).setOnClickListener(v -> startActivity(new Intent(this, ExplorePage.class)));
@@ -124,7 +135,9 @@ public class Home extends AppCompatActivity {
     }
 
     protected void editPlace(Place place) {
-        // This method is intended for navigating to the edit place page, but is currently commented out.
+        Intent intent = new Intent(this, EditPlacePage.class);
+        intent.putExtra("placeId", place.getId());
+        startActivity(intent);
     }
 
     /**
