@@ -28,7 +28,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Place place = places.get(position);
         holder.nameTextView.setText(place.getName());
-        holder.locationTextView.setText(place.getLocation());  
+        holder.locationTextView.setText(place.getLocation());
     }
 
     @Override
