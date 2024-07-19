@@ -1,5 +1,6 @@
 package com.example.hangout_csci_finalproject;
 
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -37,6 +38,13 @@ public class PlaceAdapter extends RealmRecyclerViewAdapter<Place, PlaceAdapter.V
 
         holder.deleteButton.setOnClickListener(view -> activity.deletePlace(u));
         holder.editButton.setOnClickListener(view -> activity.editPlace(u));
+
+        holder.placeImg.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, PlaceDetail.class);
+            intent.putExtra("place_id", u.getId());
+            activity.startActivity(intent);
+        });
+
         /*
         File getImageDir = activity.getExternalCacheDir();
         if (u.getPath() != null) {
@@ -51,17 +59,16 @@ public class PlaceAdapter extends RealmRecyclerViewAdapter<Place, PlaceAdapter.V
                 holder.imageView.setImageResource(R.mipmap.ic_launcher);
             }
         }
-
-         */
+        */
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView placeImg; // TextView for displaying the cat's name.
-        TextView name; // TextView for displaying the cat's breed.
-        TextView location; // TextView for displaying if the cat is deceased.
-        ImageButton deleteButton; // Button for deleting the cat entry.
-        ImageButton editButton; // ImageView for displaying the cat's image.
+        ImageView placeImg; // ImageView for displaying the place's image.
+        TextView name; // TextView for displaying the place's name.
+        TextView location; // TextView for displaying the place's location.
+        ImageButton deleteButton; // Button for deleting the place entry.
+        ImageButton editButton; // Button for editing the place entry.
 
         /**
          * Constructor for ViewHolder.
