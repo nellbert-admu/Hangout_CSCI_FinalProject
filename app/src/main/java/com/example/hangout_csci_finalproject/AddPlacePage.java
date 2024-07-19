@@ -77,12 +77,6 @@ public class AddPlacePage extends AppCompatActivity {
         PlaceImage.setOnClickListener(v -> takePic());
     }
 
-    /**
-     * Adds a new place to the Realm database with the details provided by the user.
-     * It generates a unique ID for each place, collects all the information from the input fields,
-     * and saves the new place object to the database.
-     * @param realm The Realm database instance where the new place will be added.
-     */
     private void addNewPlace() {
         String placeName = placeNameView.getText().toString();
         String location = locationView.getText().toString();
