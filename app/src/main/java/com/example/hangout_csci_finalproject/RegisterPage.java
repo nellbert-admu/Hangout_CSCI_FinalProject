@@ -59,6 +59,8 @@ public class RegisterPage extends AppCompatActivity {
     }
 
     private boolean validateInput(String username, String password, String confirmPassword) {
+        // Trim inputs to remove leading and trailing spaces
+
         if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             showToast("Fields must not be blank");
             return false;

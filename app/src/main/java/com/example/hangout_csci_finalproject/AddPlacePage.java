@@ -36,7 +36,6 @@ public class AddPlacePage extends AppCompatActivity {
     private RatingBar ratingBar;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView placeImage;
-    private String imagePathTemp;
 
     /**
      * Initializes the activity, views, and sets up listeners for the add and back buttons.
@@ -67,8 +66,7 @@ public class AddPlacePage extends AppCompatActivity {
     private void createTempPlace(Realm realm) {
         realm.executeTransaction(r -> {
             Place tempPlace = r.createObject(Place.class, UUID.randomUUID().toString());
-            tempPlace.setTemp(true); // Assuming there is a 'temp' field to indicate temporary objects
-            imagePathTemp = null; // Reset imagePathTemp for the new session
+            tempPlace.setTemp(true);
         });
     }
 
@@ -87,6 +85,7 @@ public class AddPlacePage extends AppCompatActivity {
         toggleWifi = findViewById(R.id.togglePlaceWifi);
         ratingBar = findViewById(R.id.ratingBar);
         placeImage = findViewById(R.id.placeImage);
+        updateImageView(null);
 
         placeImage.setOnClickListener(v -> takePic());
     }
@@ -105,10 +104,10 @@ public class AddPlacePage extends AppCompatActivity {
             return;
         }
 
-
         realm.executeTransaction(r -> {
             Place place = r.where(Place.class).equalTo("temp", true).findFirst();
-            if (place != null) {
+            // Check if the place has an image path first before proceeding
+            if (place != null && place.getPath() != null && !place.getPath().isEmpty()) {
                 place.setName(placeName);
                 place.setLocation(location);
                 place.setDescription(descriptionView.getText().toString());
@@ -120,19 +119,19 @@ public class AddPlacePage extends AppCompatActivity {
                 place.setRestroom(toggleRestrooms.isChecked());
                 place.setWifi(toggleWifi.isChecked());
                 place.setRating(ratingBar.getRating());
-                if (imagePathTemp != null) {
-                    place.setPath(imagePathTemp);
-                }
-                place.setTemp(false); // Mark as no longer temporary
+                place.setTemp(false);
+
+                // Log the counts and finish the activity only if the place has an image path
+                long placeCount = realm.where(Place.class).count();
+                long userCount = realm.where(User.class).count();
+                Log.d("RealmCounts", "Places: " + placeCount + ", Users: " + userCount);
+
+                setResult(Activity.RESULT_OK);
+                finish();
+            } else {
+                Toast.makeText(this, "An image must be added for the place", Toast.LENGTH_SHORT).show();
             }
         });
-
-        long placeCount = realm.where(Place.class).count();
-        long userCount = realm.where(User.class).count();
-        Log.d("RealmCounts", "Places: " + placeCount + ", Users: " + userCount);
-
-        setResult(Activity.RESULT_OK);
-        finish();
     }
 
     private void deleteTempPlace(Realm realm) {
@@ -195,15 +194,19 @@ public class AddPlacePage extends AppCompatActivity {
     }
 
     private void updateImageView(String imagePath) {
-        File file = new File(imagePath);
-        if (file.exists()) {
-            Picasso.get()
-                    .load(file)
-                    .networkPolicy(NetworkPolicy.NO_CACHE)
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .into(placeImage);
+        if (imagePath == null || imagePath.isEmpty()) {
+            placeImage.setImageResource(android.R.drawable.ic_menu_add);
         } else {
-            placeImage.setImageResource(R.mipmap.ic_launcher); // Fallback image
+            File file = new File(imagePath);
+            if (file.exists()) {
+                Picasso.get()
+                        .load(file)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .into(placeImage);
+            } else {
+                placeImage.setImageResource(android.R.drawable.ic_menu_add); // Set default image if file does not exist
+            }
         }
     }
 
