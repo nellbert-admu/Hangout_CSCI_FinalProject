@@ -1,6 +1,7 @@
 package com.example.hangout_csci_finalproject;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -10,6 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -44,6 +51,26 @@ public class PlaceAdapter extends RealmRecyclerViewAdapter<Place, PlaceAdapter.V
             intent.putExtra("place_id", u.getId());
             activity.startActivity(intent);
         });
+
+        if (u.getPath() != null && !u.getPath().isEmpty()) {
+            File file = new File(u.getPath());
+            Log.d("PlaceAdapter", "Attempting to load image from path: " + file.getAbsolutePath());
+
+            if (file.exists()) {
+                Log.d("PlaceAdapter", "Image file exists. Loading into ImageView.");
+                Picasso.get()
+                        .load(file)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .into(holder.placeImg);
+            } else {
+                Log.d("PlaceAdapter", "Image file does not exist. Using default image.");
+                holder.placeImg.setImageResource(R.mipmap.ic_launcher);
+            }
+        } else {
+            Log.d("PlaceAdapter", "Path is null. Using default image.");
+            holder.placeImg.setImageResource(R.mipmap.ic_launcher);
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

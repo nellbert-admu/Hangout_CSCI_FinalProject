@@ -1,11 +1,18 @@
 package com.example.hangout_csci_finalproject;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import io.realm.Realm;
 
@@ -14,6 +21,7 @@ public class PlaceDetail extends AppCompatActivity {
     private RatingBar ratingBar;
     private String placeId;
     private Realm realm;
+    private ImageView placeImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,7 @@ public class PlaceDetail extends AppCompatActivity {
         descriptionView = findViewById(R.id.placeDescription);
         featuresView = findViewById(R.id.placeFeatures);
         ratingBar = findViewById(R.id.ratingBar);
+        placeImage = findViewById(R.id.placeImage);
 
         // Set fields to be read-only
         placeNameView.setEnabled(false);
@@ -55,6 +64,7 @@ public class PlaceDetail extends AppCompatActivity {
             locationView.setText(place.getLocation());
             descriptionView.setText(place.getDescription());
             ratingBar.setRating(place.getRating());
+            updateImageView(place.getPath());
 
             StringBuilder features = new StringBuilder();
             if (place.isDining()) features.append("#dining ");
@@ -68,6 +78,19 @@ public class PlaceDetail extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Place not found", Toast.LENGTH_SHORT).show();
             finish();
+        }
+    }
+
+    private void updateImageView(String imagePath) {
+        File file = new File(imagePath);
+        if (file.exists()) {
+            Picasso.get()
+                    .load(file)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .into(placeImage);
+        } else {
+            placeImage.setImageResource(R.mipmap.ic_launcher); // Fallback image
         }
     }
 
