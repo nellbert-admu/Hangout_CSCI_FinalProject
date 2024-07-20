@@ -126,6 +126,7 @@ public class AddPlacePage extends AppCompatActivity {
                 long userCount = realm.where(User.class).count();
                 Log.d("RealmCounts", "Places: " + placeCount + ", Users: " + userCount);
 
+
                 setResult(Activity.RESULT_OK);
                 finish();
             } else {
