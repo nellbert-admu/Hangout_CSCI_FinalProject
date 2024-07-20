@@ -20,10 +20,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#FFF9F2"
+            android:fontFamily="@font/dm_sans"
             android:gravity="center_horizontal"
-            android:text="Image Capture"
-            android:textSize="36dp"
-            android:textStyle="bold" />
+            android:text="take a pic!"
+            android:textSize="36dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,6 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/dm_sans_medium"
                 android:text="Cancel" />
 
         </LinearLayout>

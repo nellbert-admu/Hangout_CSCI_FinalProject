@@ -13,7 +13,7 @@ import io.realm.Realm;
 public class UserProfilePage extends AppCompatActivity {
 
     private TextView usernameUserProfile, passwordUserProfile;
-    private Button editUserButton, backButtonUserProfile;
+    private Button editUserButton, backButtonUserProfile, logoutButton;
     private SharedPreferences prefs;
     private Realm realm;
 
@@ -30,9 +30,15 @@ public class UserProfilePage extends AppCompatActivity {
         passwordUserProfile = findViewById(R.id.passwordUserProfile);
         editUserButton = findViewById(R.id.editUserButton);
         backButtonUserProfile = findViewById(R.id.backButtonUserProfile);
+        logoutButton = findViewById(R.id.logoutbutton);
 
         editUserButton.setOnClickListener(v -> goToEditProfile());
         backButtonUserProfile.setOnClickListener(v -> finish());
+        logoutButton.setOnClickListener(v -> {goToLoginPage();});
+    }
+
+    private void goToLoginPage() {
+        startActivity(new Intent(this, LoginPage.class));
     }
 
     private void loadData() {

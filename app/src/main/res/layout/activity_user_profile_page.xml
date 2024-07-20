@@ -5,12 +5,49 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF9F2"
     tools:context=".UserProfilePage">
+
+    <Button
+        android:id="@+id/logoutbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="log out"
+        app:layout_constraintBottom_toTopOf="@+id/backButtonUserProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editUserButton" />
+
+    <Button
+        android:id="@+id/editUserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dm_sans_medium"
+        android:text="edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordUserProfile"
+        app:layout_constraintVertical_bias="0.146" />
+
+    <Button
+        android:id="@+id/backButtonUserProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dm_sans_medium"
+        android:text="cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editUserButton"
+        app:layout_constraintVertical_bias="0.258" />
 
     <TextView
         android:id="@+id/usernameUserProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/dm_sans"
         android:text="Username"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,6 +61,7 @@
         android:id="@+id/passwordUserProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/dm_sans"
         android:text="Password"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,27 +71,4 @@
         app:layout_constraintTop_toBottomOf="@+id/usernameUserProfile"
         app:layout_constraintVertical_bias="0.041" />
 
-    <Button
-        android:id="@+id/editUserButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordUserProfile"
-        app:layout_constraintVertical_bias="0.146" />
-
-    <Button
-        android:id="@+id/backButtonUserProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserButton"
-        app:layout_constraintVertical_bias="0.526" />
 </androidx.constraintlayout.widget.ConstraintLayout>
