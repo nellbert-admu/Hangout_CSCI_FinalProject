@@ -8,7 +8,7 @@
     tools:context=".AddPlacePage">
 
     <ImageView
-        android:id="@+id/PlaceImage"
+        android:id="@+id/placeImage"
         android:layout_width="229dp"
         android:layout_height="122dp"
         android:layout_marginTop="19dp"
@@ -71,7 +71,7 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PlaceImage" />
+        app:layout_constraintTop_toBottomOf="@+id/placeImage" />
 
     <RatingBar
         android:id="@+id/ratingBar"

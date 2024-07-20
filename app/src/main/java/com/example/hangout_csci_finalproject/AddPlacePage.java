@@ -1,15 +1,24 @@
 package com.example.hangout_csci_finalproject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 import io.realm.Realm;
@@ -25,6 +34,9 @@ public class AddPlacePage extends AppCompatActivity {
     private EditText placeNameView, locationView, descriptionView;
     private ToggleButton toggleDining, toggleOutlets, toggleAircon, toggleQuiet, toggleRestrooms, toggleWifi;
     private RatingBar ratingBar;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private ImageView placeImage;
+    private String imagePathTemp;
 
     /**
      * Initializes the activity, views, and sets up listeners for the add and back buttons.
@@ -42,11 +54,21 @@ public class AddPlacePage extends AppCompatActivity {
         initViews();
         Realm realm = Realm.getDefaultInstance();
 
-        findViewById(R.id.editButton).setOnClickListener(v -> addNewPlace(realm));
-        findViewById(R.id.backButton).setOnClickListener(v -> finish());
-        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            // handle the rating value (rating) if needed immediately
+        // Create a temporary Place object
+        createTempPlace(realm);
 
+        findViewById(R.id.editButton).setOnClickListener(v -> addNewPlace(realm));
+        findViewById(R.id.backButton).setOnClickListener(v -> {
+            deleteTempPlace(realm);
+            finish();
+        });
+    }
+
+    private void createTempPlace(Realm realm) {
+        realm.executeTransaction(r -> {
+            Place tempPlace = r.createObject(Place.class, UUID.randomUUID().toString());
+            tempPlace.setTemp(true); // Assuming there is a 'temp' field to indicate temporary objects
+            imagePathTemp = null; // Reset imagePathTemp for the new session
         });
     }
 
@@ -64,6 +86,9 @@ public class AddPlacePage extends AppCompatActivity {
         toggleRestrooms = findViewById(R.id.toggleRestrooms);
         toggleWifi = findViewById(R.id.togglePlaceWifi);
         ratingBar = findViewById(R.id.ratingBar);
+        placeImage = findViewById(R.id.placeImage);
+
+        placeImage.setOnClickListener(v -> takePic());
     }
 
     /**
@@ -81,22 +106,26 @@ public class AddPlacePage extends AppCompatActivity {
         }
 
 
-        String uniqueId = UUID.randomUUID().toString();
-
-        realm.beginTransaction();
-        Place place = realm.createObject(Place.class, uniqueId);
-        place.setName(placeName);
-        place.setLocation(location);
-        place.setDescription(descriptionView.getText().toString());
-        place.setUserUuid(getSharedPreferences("my_prefs", MODE_PRIVATE).getString("UUID", ""));
-        place.setDining(toggleDining.isChecked());
-        place.setOutlet(toggleOutlets.isChecked());
-        place.setAircon(toggleAircon.isChecked());
-        place.setQuiet(toggleQuiet.isChecked());
-        place.setRestroom(toggleRestrooms.isChecked());
-        place.setWifi(toggleWifi.isChecked());
-        place.setRating(ratingBar.getRating());
-        realm.commitTransaction();
+        realm.executeTransaction(r -> {
+            Place place = r.where(Place.class).equalTo("temp", true).findFirst();
+            if (place != null) {
+                place.setName(placeName);
+                place.setLocation(location);
+                place.setDescription(descriptionView.getText().toString());
+                place.setUserUuid(getSharedPreferences("my_prefs", MODE_PRIVATE).getString("UUID", ""));
+                place.setDining(toggleDining.isChecked());
+                place.setOutlet(toggleOutlets.isChecked());
+                place.setAircon(toggleAircon.isChecked());
+                place.setQuiet(toggleQuiet.isChecked());
+                place.setRestroom(toggleRestrooms.isChecked());
+                place.setWifi(toggleWifi.isChecked());
+                place.setRating(ratingBar.getRating());
+                if (imagePathTemp != null) {
+                    place.setPath(imagePathTemp);
+                }
+                place.setTemp(false); // Mark as no longer temporary
+            }
+        });
 
         long placeCount = realm.where(Place.class).count();
         long userCount = realm.where(User.class).count();
@@ -104,6 +133,86 @@ public class AddPlacePage extends AppCompatActivity {
 
         setResult(Activity.RESULT_OK);
         finish();
+    }
+
+    private void deleteTempPlace(Realm realm) {
+        realm.executeTransaction(r -> {
+            Place tempPlace = r.where(Place.class).equalTo("temp", true).findFirst();
+            if (tempPlace != null) {
+                tempPlace.deleteFromRealm();
+            }
+        });
+    }
+
+    private void takePic() {
+        Intent intent = new Intent(this, ImageActivity.class);
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode, Intent data) {
+        super.onActivityResult(requestCode, responseCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (responseCode == ImageActivity.RESULT_CODE_IMAGE_TAKEN) {
+                try {
+                    byte[] jpeg = data.getByteArrayExtra("rawJpeg");
+                    if (jpeg != null) {
+                        Log.d("AddPlacePage", "Received JPEG data");
+                        File finalImageFile = saveFile(jpeg, UUID.randomUUID().toString() + ".jpeg");
+                        Log.d("AddPlacePage", "Saving image to: " + finalImageFile.getAbsolutePath());
+
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(r -> {
+                            Place tempPlace = r.where(Place.class).equalTo("temp", true).findFirst();
+                            if (tempPlace != null) {
+                                tempPlace.setPath(finalImageFile.getAbsolutePath());
+                            }
+                        });
+                        realm.close();
+
+                        updateImageView(finalImageFile.getAbsolutePath());
+
+                    } else {
+                        Log.d("AddPlacePage", "No JPEG data received");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Error saving image", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private File saveFile(byte[] jpeg, String name) throws IOException {
+        File getImageDir = getExternalCacheDir();
+        File savedImage = new File(getImageDir, name);
+
+        try (FileOutputStream fos = new FileOutputStream(savedImage)) {
+            fos.write(jpeg);
+        }
+        return savedImage;
+    }
+
+    private void updateImageView(String imagePath) {
+        File file = new File(imagePath);
+        if (file.exists()) {
+            Picasso.get()
+                    .load(file)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .into(placeImage);
+        } else {
+            placeImage.setImageResource(R.mipmap.ic_launcher); // Fallback image
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Realm realm = Realm.getDefaultInstance();
+        deleteTempPlace(realm);
+        realm.close();
+        super.onBackPressed();
     }
 
     /**

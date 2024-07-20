@@ -17,8 +17,27 @@ public class Place extends RealmObject {
     private boolean restroom;
     private boolean wifi;
     private float rating;
+    private String path;
+    private boolean temp;
 
     // Getters and setters
+
+    public boolean isTemp() {
+        return temp;
+    }
+
+    public void setTemp(boolean temp) {
+        this.temp = temp;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
