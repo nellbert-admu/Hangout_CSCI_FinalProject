@@ -21,6 +21,7 @@ public class Place extends RealmObject {
     private boolean temp;
 
     // Getters and setters
+    // hello
 
     public boolean isTemp() {
         return temp;
