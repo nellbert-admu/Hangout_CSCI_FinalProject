@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="orange_200">#FFCC80</color>
+    <color name="orange_200">#EEEEEE</color>
     <color name="orange_500">#545454</color>
-    <color name="orange_700">#545454</color>
-    <color name="teal_200">#545454</color>
-    <color name="teal_700">#545454</color>
+    <color name="orange_700">#424242</color>
+    <color name="teal_200">#B0BEC5</color>
+    <color name="teal_700">#455A64</color>
     <color name="black">#545454</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#EFEBE9</color>
 </resources>
